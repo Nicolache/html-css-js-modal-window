@@ -37,44 +37,52 @@
     margin-left: 96%;
 }
   </style>
+<script type="text/javascript" src="dygraph.js"></script>
+<link rel="stylesheet" src="dygraph.css" />
 </head> 
 <body onload="modalWindow.show(500)">
 <!-- <body> -->
-<h1>privet</h1>
 <div onclick="modalWindow.show(500)">Show modal window</div>
+<div id="graphdiv"></div>
 
   <script>
+  g = new Dygraph(
+    document.getElementById("graphdiv"),"Date,Temperature\n2008-05-07,75\n2008-05-08,70\n2008-05-09,80\n");
 var modal_html = '<div id="modal_close" onClick="modalWindow.close()">X</div>To be, or not to be, that is the question:<br>Whether tis nobler in the mind to suffer<br>The slings and arrows of outrageous fortune,<br>Or to take Arms against a Sea of troubles,<br>And by opposing end them: to die, to sleep'
+//var madal_html = '<div id="graphdiv"></div><script>g = new Dygraph(document.getElementById("graphdiv"),"Date,Temperature\n2008-05-07,75\n2008-05-08,70\n2008-05-09,80\n");<\/script>'
 // https://habrahabr.ru/sandbox/54323/
 
 document.addEventListener('keydown', modalEscClose);
 
 function modalEscClose (e) {
     if ( !e.keyCode || e.keyCode === 27 ) {
-        document.getElementById('blockscreen').style.display = 'none';
-        document.getElementById('modalwindow').style.display = 'none';
+//        document.getElementById('blockscreen').style.display = 'none';
+//        document.getElementById('modalwindow').style.display = 'none';
+        document.getElementById('blockscreen').style.visibility = 'hidden';
+        document.getElementById('modalwindow').style.visibility = 'hidden';
     }
 }
 //console.log(document.body)
 //console.dir(document.body)
 var modalWindow = {
-    _block: null,
+    _shadow: null,
     _win: null,
 
 
-initBlock: function() {
-        _block = document.getElementById('blockscreen'); //Получаем наш блокирующий фон по ID
+initShadow: function() {
+        _shadow = document.getElementById('blockscreen'); //Получаем наш блокирующий фон по ID
 
         //Если он не определен, то создадим его
-        if (!_block) {
+        if (!_shadow) {
             var parent = document.getElementsByTagName('body')[0]; //Получим первый элемент тега body
             var obj = parent.firstChild; //Для того, чтобы вставить наш блокирующий фон в самое начало тега body
-            _block = document.createElement('div'); //Создаем элемент div
-            _block.id = 'blockscreen'; //Присваиваем ему наш ID
-            parent.insertBefore(_block, obj); //Вставляем в начало
-            _block.onclick = function() { modalWindow.close(); } //Добавим обработчик события по нажатию на блокирующий экран - закрыть модальное окно.
+            _shadow = document.createElement('div'); //Создаем элемент div
+            _shadow.id = 'blockscreen'; //Присваиваем ему наш ID
+            parent.insertBefore(_shadow, obj); //Вставляем в начало
+            _shadow.onclick = function() { modalWindow.close(); } //Добавим обработчик события по нажатию на блокирующий экран - закрыть модальное окно.
         }
-        _block.style.display = 'inline'; //Установим CSS-свойство        
+        _shadow.style.display = 'inline'; //Установим CSS-свойство        
+        _shadow.style.visibility = 'visible'
     },
 initWin: function(width) {
         _win = document.getElementById('modalwindow'); //Получаем наше диалоговое окно по ID
@@ -91,6 +99,7 @@ initWin: function(width) {
         }
         _win.style.width = width + 'px'; //Установим ширину окна
         _win.style.display = 'inline'; //Зададим CSS-свойство
+        _win.style.visibility = 'visible'
         
         _win.innerHTML = modal_html; //Добавим нужный HTML-текст в наше диалоговое окно
 //        _win.innerHTML = '<iframe src="window.html" width="100%" height="100%"></iframe>'; //Добавим нужный HTML-текст в наше диалоговое окно
@@ -105,12 +114,14 @@ initWin: function(width) {
         _win.style.marginLeft = -(width / 2) + 'px';
     },
 close: function() {
-        document.getElementById('blockscreen').style.display = 'none';
-        document.getElementById('modalwindow').style.display = 'none';        
+//        document.getElementById('blockscreen').style.display = 'none';
+//        document.getElementById('modalwindow').style.display = 'none';        
+        document.getElementById('blockscreen').style.visibility = 'hidden';
+        document.getElementById('modalwindow').style.visibility = 'hidden';
     },
  //show: function(width, modal_html) {
  show: function(width) {
-        modalWindow.initBlock();
+        modalWindow.initShadow();
         modalWindow.initWin(width);
     }
 
