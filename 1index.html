@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html> 
+<head>
+  <title>Nic dialog window</title>
+  <style>
+    #dialogwindow {
+        z-index: 11;
+        background: #fff;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #a1a1a1;
+        box-shadow: 0 0 10px #444;
+        width: 500px;
+        display: none;
+        margin-left: 300px;
+        margin-top: 200px;
+    }
+    #backshadow {
+        background: rgba(0, 0, 0, .5);
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+        display: none;
+    }
+  </style>
+</head> 
+<body>
+<div id="backshadow">backshadowbackshadowbackshadowbackshadowbackshadowbackshadowbackshadow</div>
+    <div id="dialogwindow">adfasdfadlkmlasdfkmlas</div>
+    <div onclick="windowshow()">Show modal window</div>
+    <script>
+    function shadowon() {
+        var first_of_body = document.getElementsByTagName('body')[0];
+    }
+    function windowshow() {
+        shadowon();
+        document.getElementById('dialogwindow').style.display = 'inline';
+    }
+</script>
+</body> 
+</html>
