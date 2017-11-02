@@ -3,25 +3,23 @@
 <head>
   <title>Modal window</title>
   <style>
-    canvas {
-      display: block;
-    }
     html, body {
         height: 100%;
         width: 100%;
       margin: 0;
       padding: 0;
     }
-#blockscreen, #modalwindow {
+#shadowscreen, #modalwindow {
     position: fixed;
 }
-#blockscreen {
+#shadowscreen {
     background: rgba(0, 0, 0, .5);
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     z-index: 10;
+    visibility: hidden;
 }
 #modalwindow {
     z-index: 11;
@@ -30,6 +28,7 @@
     border-radius: 5px;
     border: 1px solid #a1a1a1;
     box-shadow: 0 0 10px #444;
+    visibility: hidden;
 }
 #modal_close {
     left: 1%;
@@ -39,96 +38,71 @@
   </style>
 <script type="text/javascript" src="dygraph.js"></script>
 <link rel="stylesheet" src="dygraph.css" />
-</head> 
 <body onload="modalWindow.show(500)">
-<!-- <body> -->
+<body>
+
+<div id="shadowscreen"></div>
+<div id="modalwindow" style="padding: 0px 0px 5px; width: 500px; left: 50%; top: 50%; margin-top: -60.5px; margin-left: -250px;">
+    <div id="modal_close" onclick="modalWindow.close()">X
+    </div>
+    <div id="graphdiv">
+    </div>
+</div>
+
 <div onclick="modalWindow.show(500)">Show modal window</div>
-<div id="graphdiv"></div>
 
   <script>
-  g = new Dygraph(
-    document.getElementById("graphdiv"),"Date,Temperature\n2008-05-07,75\n2008-05-08,70\n2008-05-09,80\n");
-var modal_html = '<div id="modal_close" onClick="modalWindow.close()">X</div>To be, or not to be, that is the question:<br>Whether tis nobler in the mind to suffer<br>The slings and arrows of outrageous fortune,<br>Or to take Arms against a Sea of troubles,<br>And by opposing end them: to die, to sleep'
-//var madal_html = '<div id="graphdiv"></div><script>g = new Dygraph(document.getElementById("graphdiv"),"Date,Temperature\n2008-05-07,75\n2008-05-08,70\n2008-05-09,80\n");<\/script>'
-// https://habrahabr.ru/sandbox/54323/
+g = new Dygraph(
+
+    // containing div
+    document.getElementById("graphdiv"),
+
+    // CSV or path to a CSV file.
+    "Date,Temperature\n" +
+    "2008-05-07,75\n" +
+    "2008-05-08,70\n" +
+    "2008-05-09,80\n"
+
+  );
 
 document.addEventListener('keydown', modalEscClose);
 
 function modalEscClose (e) {
     if ( !e.keyCode || e.keyCode === 27 ) {
-//        document.getElementById('blockscreen').style.display = 'none';
-//        document.getElementById('modalwindow').style.display = 'none';
-        document.getElementById('blockscreen').style.visibility = 'hidden';
+        document.getElementById('shadowscreen').style.visibility = 'hidden';
         document.getElementById('modalwindow').style.visibility = 'hidden';
     }
 }
-//console.log(document.body)
-//console.dir(document.body)
 var modalWindow = {
     _shadow: null,
     _win: null,
 
 
 initShadow: function() {
-        _shadow = document.getElementById('blockscreen'); //Получаем наш блокирующий фон по ID
-
-        //Если он не определен, то создадим его
-        if (!_shadow) {
-            var parent = document.getElementsByTagName('body')[0]; //Получим первый элемент тега body
-            var obj = parent.firstChild; //Для того, чтобы вставить наш блокирующий фон в самое начало тега body
-            _shadow = document.createElement('div'); //Создаем элемент div
-            _shadow.id = 'blockscreen'; //Присваиваем ему наш ID
-            parent.insertBefore(_shadow, obj); //Вставляем в начало
-            _shadow.onclick = function() { modalWindow.close(); } //Добавим обработчик события по нажатию на блокирующий экран - закрыть модальное окно.
-        }
-        _shadow.style.display = 'inline'; //Установим CSS-свойство        
+        _shadow = document.getElementById('shadowscreen');
+        _shadow.onclick = function() { modalWindow.close(); }
         _shadow.style.visibility = 'visible'
     },
+
 initWin: function(width) {
-        _win = document.getElementById('modalwindow'); //Получаем наше диалоговое окно по ID
-        //Если оно не определено, то также создадим его по аналогии
-        if (!_win) {
-            var parent = document.getElementsByTagName('body')[0];
-            var obj = parent.firstChild;
-            _win = document.createElement('div');
-            _win.id = 'modalwindow';
-            _win.style.padding = '0 0 5px 0';
-//            _win.onclick = function() { modalWindow.close(); } //Добавим обработчик события по нажатию на блокирующий экран - закрыть модальное окно.
-//            _win.keypress = function(e) { debugger; if ( !e.keyCode |s| e.keyCode === 27 ) { modalWindow.close(); } };
-            parent.insertBefore(_win, obj);
-        }
-        _win.style.width = width + 'px'; //Установим ширину окна
-        _win.style.display = 'inline'; //Зададим CSS-свойство
+        _win = document.getElementById('modalwindow');
         _win.style.visibility = 'visible'
         
-        _win.innerHTML = modal_html; //Добавим нужный HTML-текст в наше диалоговое окно
-//        _win.innerHTML = '<iframe src="window.html" width="100%" height="100%"></iframe>'; //Добавим нужный HTML-текст в наше диалоговое окно
-        
-        //Установим позицию по центру экрана
+        _win.style.left = '50%';
+        _win.style.top = '50%';
 
-        _win.style.left = '50%'; //Позиция по горизонтали
-        _win.style.top = '50%'; //Позиция по вертикали
-
-        //Выравнивание по центру путем задания отрицательных отступов
         _win.style.marginTop = -(_win.offsetHeight / 2) + 'px'; 
         _win.style.marginLeft = -(width / 2) + 'px';
     },
 close: function() {
-//        document.getElementById('blockscreen').style.display = 'none';
-//        document.getElementById('modalwindow').style.display = 'none';        
-        document.getElementById('blockscreen').style.visibility = 'hidden';
+        document.getElementById('shadowscreen').style.visibility = 'hidden';
         document.getElementById('modalwindow').style.visibility = 'hidden';
     },
- //show: function(width, modal_html) {
  show: function(width) {
         modalWindow.initShadow();
         modalWindow.initWin(width);
     }
-
-
-
- }//Конец описания нашего объекта
-
+ }
   </script> 
 
 </body> 
