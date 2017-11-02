@@ -3,9 +3,6 @@
 <head>
   <title>Modal window</title>
   <style>
-    canvas {
-      display: block;
-    }
     html, body {
         height: 100%;
         width: 100%;
@@ -39,20 +36,34 @@
     margin-left: 96%;
 }
   </style>
-</head> 
-<!-- <body onload="modalWindow.show(500)"> -->
+<script type="text/javascript" src="dygraph.js"></script>
+<link rel="stylesheet" src="dygraph.css" />
+<body onload="modalWindow.show(500)">
 <body>
 
 <div id="shadowscreen"></div>
 <div id="modalwindow" style="padding: 0px 0px 5px; width: 500px; left: 50%; top: 50%; margin-top: -60.5px; margin-left: -250px;">
     <div id="modal_close" onclick="modalWindow.close()">X
     </div>
-To be, or not to be, that is the question:<br>Whether tis nobler in the mind to suffer<br>The slings and arrows of outrageous fortune,<br>Or to take Arms against a Sea of troubles,<br>And by opposing end them: to die, to sleep
+    <div id="graphdiv">
+    </div>
 </div>
 
 <div onclick="modalWindow.show(500)">Show modal window</div>
 
   <script>
+g = new Dygraph(
+
+    // containing div
+    document.getElementById("graphdiv"),
+
+    // CSV or path to a CSV file.
+    "Date,Temperature\n" +
+    "2008-05-07,75\n" +
+    "2008-05-08,70\n" +
+    "2008-05-09,80\n"
+
+  );
 
 document.addEventListener('keydown', modalEscClose);
 
@@ -69,17 +80,16 @@ var modalWindow = {
 
 initShadow: function() {
         _shadow = document.getElementById('shadowscreen');
-        _shadow.style.display = 'inline';
+        _shadow.onclick = function() { modalWindow.close(); }
         _shadow.style.visibility = 'visible'
     },
 
 initWin: function(width) {
-        _win = document.getElementById('modalwindow'); //Получаем наше диалоговое окно по ID
-        _win.style.display = 'inline'; //Зададим CSS-свойство
+        _win = document.getElementById('modalwindow');
         _win.style.visibility = 'visible'
         
-        _win.style.left = '50%'; //Позиция по горизонтали
-        _win.style.top = '50%'; //Позиция по вертикали
+        _win.style.left = '50%';
+        _win.style.top = '50%';
 
         _win.style.marginTop = -(_win.offsetHeight / 2) + 'px'; 
         _win.style.marginLeft = -(width / 2) + 'px';
@@ -93,8 +103,6 @@ close: function() {
         modalWindow.initWin(width);
     }
  }
-//console.log(document.body)
-//console.dir(document.body)
   </script> 
 
 </body> 
