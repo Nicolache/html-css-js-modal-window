@@ -2,44 +2,11 @@
 <html> 
 <head>
   <title>Modal window</title>
-  <style>
-    html, body {
-        height: 100%;
-        width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-#shadowscreen, #modalwindow {
-    position: fixed;
-}
-#shadowscreen {
-    background: rgba(0, 0, 0, .5);
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 10;
-    visibility: hidden;
-}
-#modalwindow {
-    z-index: 11;
-    background: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #a1a1a1;
-    box-shadow: 0 0 10px #444;
-    visibility: hidden;
-}
-#modal_close {
-    left: 1%;
-    text-align: center;
-    margin-left: 96%;
-}
-  </style>
+<link rel="stylesheet" href="dialog.css" />
 <script type="text/javascript" src="dygraph.js"></script>
 <link rel="stylesheet" src="dygraph.css" />
+</head>
 <body onload="modalWindow.show(500)">
-<body>
 
 <div id="shadowscreen"></div>
 <div id="modalwindow" style="padding: 0px 0px 5px; width: 500px; left: 50%; top: 50%; margin-top: -60.5px; margin-left: -250px;">
@@ -58,10 +25,10 @@ g = new Dygraph(
     document.getElementById("graphdiv"),
 
     // CSV or path to a CSV file.
-    "Date,Temperature\n" +
-    "2008-05-07,75\n" +
-    "2008-05-08,70\n" +
-    "2008-05-09,80\n"
+    "Date,Temperature,Temperature2\n" +
+    "2008-05-07,75,85\n" +
+    "2008-05-08,70,75\n" +
+    "2008-05-09,80,95\n"
 
   );
 
